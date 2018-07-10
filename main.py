@@ -1,6 +1,6 @@
 import sys
 
-HEADLESS = True
+HEADLESS = False
 
 if HEADLESS:
     import time
@@ -106,21 +106,35 @@ def hsv2rgb_with_math(H, S, V):
 
 def computeColors(timePercent):
     # Flare
+    dna_1_hue = 0
+    dna_2_hue = 0
     for i in range(len(FLARE_INDICES)):
         flarePercent = (i / float(len(FLARE_INDICES)))
         hueOffset = flarePercent * FLARE_HUE_SPREAD
         iPercent = ((1 - timePercent) + hueOffset) % 1
-        v = 1 - flarePercent / 3 # Dim the edges a bit
+        v = 1 # - flarePercent / 3 # Dim the edges a bit
         rgb = hsv2rgb(iPercent, 1, v)
         flareIndex = FLARE_INDICES[i]
         colors[flareIndex] = rgb
-    # Background
+        # Set the value for the DNA strands as an offset of the inner-most and outer-most flare
+        if i == 0:
+            dna_1_hue = iPercent
+        elif i == len(FLARE_INDICES) - 1:
+            dna_2_hue = iPercent
+    
+    # DNA Strands (uses Background colors, even though we don't have a background)
+    colors[BACKGROUND_INDICES[0]] = hsv2rgb((dna_1_hue + .5) % 1, 1, 1)
+    colors[BACKGROUND_INDICES[1]] = hsv2rgb((dna_2_hue + .5) % 1, 1, 1)
+
+    # Background (No background for now)
     # bounceTimePercent goes from 0 to 1 then back to 0 (instead of 0 to 1 like timePercent)
-    bounceTimePercent = timePercent * 2 if timePercent < .5 else (1 - timePercent) * 2
-    backgroundValue1 = (BACKGROUND_VALUE_2 - BACKGROUND_VALUE_1) * bounceTimePercent + BACKGROUND_VALUE_1
-    backgroundValue2 = BACKGROUND_VALUE_2 - (BACKGROUND_VALUE_2 - BACKGROUND_VALUE_1) * bounceTimePercent
-    colors[BACKGROUND_INDICES[0]] = hsv2rgb(BACKGROUND_HUE_1, 1, backgroundValue1)
-    colors[BACKGROUND_INDICES[1]] = hsv2rgb(BACKGROUND_HUE_2, 1, backgroundValue2)
+    # bounceTimePercent = timePercent * 2 if timePercent < .5 else (1 - timePercent) * 2
+    # backgroundValue1 = (BACKGROUND_VALUE_2 - BACKGROUND_VALUE_1) * bounceTimePercent + BACKGROUND_VALUE_1
+    # backgroundValue2 = BACKGROUND_VALUE_2 - (BACKGROUND_VALUE_2 - BACKGROUND_VALUE_1) * bounceTimePercent
+    # colors[BACKGROUND_INDICES[0]] = hsv2rgb(BACKGROUND_HUE_1, 1, backgroundValue1)
+    # colors[BACKGROUND_INDICES[1]] = hsv2rgb(BACKGROUND_HUE_2, 1, backgroundValue2)
+    
+    
 
 ## Only used when running on a computer with a screen ##
 def drawToImage(image):
@@ -143,7 +157,7 @@ def drawFrameToScreen():
     SCALE = 12
 
     width = 58
-    height = 60
+    height = 59
 
     image = pygame.Surface((width, height))
 
