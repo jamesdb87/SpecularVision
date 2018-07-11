@@ -1,6 +1,6 @@
 import sys
 
-HEADLESS = False
+HEADLESS = True
 
 if HEADLESS:
     import time
@@ -186,6 +186,7 @@ def drawFrameToScreen():
 def pushToLEDs():
     dot[0] = colors[3] # Make the test LED light up the same as the third light
     array = [] # Make a linear array containing the colors for all the bulbs (r1, g1, b1, r2, g2, b2, etc)
+    time.sleep(.001)
     for color in colors:
         array.extend(color)
     serial.write(bytes(array))
