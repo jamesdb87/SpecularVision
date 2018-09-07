@@ -17,7 +17,7 @@ else:
 start_time = time.monotonic() if HEADLESS else datetime.now()
 
 HEADFUL_MILLISECONDS_PER_REVOLUTION = 15 * 1000
-HEADLESS_TICKS_PER_REVOLUTION = 5
+HEADLESS_TICKS_PER_REVOLUTION = 7
 FLARE_HUE_SPREAD = 0.2 # The flare ranges from hue x to hue x + FLARE_HUE_SPREAD (hues range from 0 to 1)
 BACKGROUND_VALUE_1 = 0
 BACKGROUND_VALUE_2 = .5
@@ -26,7 +26,6 @@ BACKGROUND_HUE_2 = 0.5 # Aqua
 BACKGROUND_VALUE = .5 # Darken it a bit
 
 colors = [
-    [0, 0, 0], # DNA pairs (pointed directly at viewer)
     [236, 106, 229], # Petal outer
     [0, 64, 0], # Background 2
     [255, 253, 84], # Flare 6 (outside)
@@ -39,8 +38,8 @@ colors = [
     [95, 32, 182], # Petal outline
     [239, 144, 249], # Petal center
 ]
-FLARE_INDICES = [6, 7, 5, 8, 4, 3] # The indices into the color array of the flare, starting from innermost
-BACKGROUND_INDICES = [9, 2]
+FLARE_INDICES = [5, 6, 4, 7, 3, 2] # The indices into the color array of the flare, starting from innermost
+BACKGROUND_INDICES = [8, 1]
 
 def hsv2rgb(h, s, v):
     # if HEADLESS:
